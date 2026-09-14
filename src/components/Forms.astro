@@ -25,63 +25,92 @@
     <label for="ag-score">Aggregation Score:</label>
     <input type="number" id="ag-score" name="ag-score" min="0" max="24" />
 
-    <label for="percent">Percentage:</label>
+    <label for="percentage">Percentage:</label>
     <input type="number" id="percentage" name="percentage" min="0" max="100" />
 
-    <input type="submit" id="submit" value="Calculate" />
 </form>
 
 <script>
     import manifest from "astro:config/client";
+import { number } from "astro:schema";
 
     const form = document.getElementById("form");
 
     const gradeField = document.getElementById("grade");
     const aggregateField = document.getElementById("ag-score");
-    const percentField = document.getElementById("percentage");
+    const percentageField = document.getElementById("percentage");
 
-    form.addEventListener("submit", function (event) {
-        event.preventDefault();
-
-        var formData = new FormData(form);
-        const submitButton = document.getElementById("submit");
+    // Monitor fields and update conversion on change
+    gradeField.addEventListener("input", (e) => {
+        let gradeValue = document.getElementById("grade").value;
         
-        // Populate from user input
-        let gradeValue = formData.get("grade");
-        let aggregateValue = formData.get("ag-score");
-        let percentValue = formData.get("percentage");
+        let percentField = document.getElementById("percentage");
+        let aggregateField = document.getElementById("ag-score");
+        
+        // Populate conversions
+        let convPercent = getFromGrade(gradeValue, "Percent");
+        let convAggregate = getFromGrade(gradeValue, "Aggregate");
 
-        // Check where to fill w/ new data
-        if (gradeValue) {
-            let convPercent = getFromGrade(gradeValue, 'Percent');
-            let convAggregate = getFromGrade(gradeValue, 'Aggregate');
-            
-            if (convPercent) {
-                percentField.value = convPercent;
-            }
-            if (convAggregate) {
-                aggregateField.value = convAggregate;
-            }
+        if (convPercent) {
+            percentField.value = convPercent;
+        }
+        if (convAggregate) {
+            aggregateField.value = convAggregate;
         }
     });
 
+    aggregateField.addEventListener("input", (e) => {
+        let aggregateValue = document.getElementById("ag-score").value;
+        let percentField = document.getElementById("percentage");
+        let gradeField = document.getElementById("grade");
+        
+        let convPercent = getFromAggregate(aggregateValue, "Percent");
+        let convGrade = getFromAggregate(aggregateValue, "Grade");
+
+        if (convPercent) {
+            percentField.value = convPercent;
+        }
+        if (convGrade) {
+            gradeField.value = convGrade;
+        }
+    });
+
+    percentageField.addEventListener("input", (e) => {
+        const percentageValue = Number(percentageField.value);
+        const aggregateField = document.getElementById("ag-score");
+        const gradeField = document.getElementById("grade");
+        
+        if (!Number.isFinite(percentageValue)) {
+            return;
+        }
+
+        let convAggregate = getFromPercent(percentageValue, "Aggregate");
+        let convGrade = getFromPercent(percentageValue, "Grade");
+
+        if (convAggregate) {
+            aggregateField.value = convAggregate;
+        }
+        if (convGrade) {
+            gradeField.value = convGrade;
+        }
+    });
     let grades = [
-        { grade: "A+", aggregate: "24", percent: "100" },
-        { grade: "A", aggregate: "21", percent: "80" },
-        { grade: "A-", aggregate: "18", percent: "70" },
-        { grade: "B+", aggregate: "17", percent: "66.66" },
-        { grade: "B", aggregate: "16", percent: "63.5" },
-        { grade: "B-", aggregate: "15", percent: "53" },
-        { grade: "C+", aggregate: "14", percent: "46" },
-        { grade: "C", aggregate: "13", percent: "40" },
-        { grade: "C-", aggregate: "12", percent: "33" },
-        { grade: "D+", aggregate: "11", percent: "26" },
-        { grade: "D", aggregate: "10", percent: "20" },
-        { grade: "D-", aggregate: "9", percent: "13" },
-        { grade: "F1", aggregate: "7", percent: "31" },
-        { grade: "F2", aggregate: "4", percent: "18" },
-        { grade: "F3", aggregate: "2", percent: "9" },
-        { grade: "F4", aggregate: "0", percent: "0" },
+        { grade: "A+", aggregate: "24", percentage: "100" },
+        { grade: "A", aggregate: "21", percentage: "80" },
+        { grade: "A-", aggregate: "18", percentage: "70" },
+        { grade: "B+", aggregate: "17", percentage: "66.66" },
+        { grade: "B", aggregate: "16", percentage: "63.5" },
+        { grade: "B-", aggregate: "15", percentage: "53" },
+        { grade: "C+", aggregate: "14", percentage: "46" },
+        { grade: "C", aggregate: "13", percentage: "40" },
+        { grade: "C-", aggregate: "12", percentage: "33" },
+        { grade: "D+", aggregate: "11", percentage: "26" },
+        { grade: "D", aggregate: "10", percentage: "20" },
+        { grade: "D-", aggregate: "9", percentage: "13" },
+        { grade: "F1", aggregate: "7", percentage: "31" },
+        { grade: "F2", aggregate: "4", percentage: "18" },
+        { grade: "F3", aggregate: "2", percentage: "9" },
+        { grade: "F4", aggregate: "0", percentage: "0" },
     ];
 
     function getFromGrade(grade, conversionType) {
@@ -90,7 +119,7 @@
         });
 
         if (conversionType == "Percent") {
-            return match?.percent;
+            return match?.percentage;
         } else {
             return match?.aggregate;
         }
@@ -102,16 +131,26 @@
         });
 
         if (conversionType == "Percent") {
-            return match?.percent;
+            return match?.percentage;
         } else {
             return match?.grade;
         }
     }
 
-    function getFromPercent(percent, conversionType) {
-        const match = grades.find((row) => {
-            return percent >= row.percent;
-        });
+    function getFromPercent(percentage, conversionType) {
+        const match = grades.reduce((bestMatch, row) => {
+            const rowPercentage = Number(row.percentage);
+
+            if (
+                Number(percentage) >= rowPercentage &&
+                (!bestMatch || rowPercentage > Number(bestMatch.percentage))
+            ) {
+                return row;
+            }
+
+            return bestMatch;
+        }, undefined);
+
         if (conversionType == "Grade") {
             return match?.grade;
         } else {
