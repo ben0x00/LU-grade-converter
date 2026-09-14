@@ -1,0 +1,147 @@
+---
+---
+
+<form id="form">
+    <label for="grade">Grade:</label>
+    <select name="grade" id="grade">
+        <option value="A+">A+</option>
+        <option value="A">A</option>
+        <option value="A-">A-</option>
+        <option value="B+">B+</option>
+        <option value="B">B</option>
+        <option value="B-">B-</option>
+        <option value="C+">C+</option>
+        <option value="C">C</option>
+        <option value="C-">C-</option>
+        <option value="D+">D+</option>
+        <option value="D">D</option>
+        <option value="D-">D-</option>
+        <option value="F1">Marginal Fail (F1)</option>
+        <option value="F2">Fail (F2)</option>
+        <option value="F3">Poor Fail (F3)</option>
+        <option value="F4">Very Poor Fail (F4)</option>
+    </select>
+
+    <label for="ag-score">Aggregation Score:</label>
+    <input type="number" id="ag-score" name="ag-score" min="0" max="24" />
+
+    <label for="percent">Percentage:</label>
+    <input type="number" id="percentage" name="percentage" min="0" max="100" />
+
+    <input type="submit" id="submit" value="Calculate" />
+</form>
+
+<script>
+    import manifest from "astro:config/client";
+
+    const form = document.getElementById("form");
+
+    const gradeField = document.getElementById("grade");
+    const aggregateField = document.getElementById("ag-score");
+    const percentField = document.getElementById("percentage");
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        var formData = new FormData(form);
+        const submitButton = document.getElementById("submit");
+        
+        // Populate from user input
+        let gradeValue = formData.get("grade");
+        let aggregateValue = formData.get("ag-score");
+        let percentValue = formData.get("percentage");
+
+        // Check where to fill w/ new data
+        if (gradeValue) {
+            let convPercent = getFromGrade(gradeValue, 'Percent');
+            let convAggregate = getFromGrade(gradeValue, 'Aggregate');
+            
+            if (convPercent) {
+                percentField.value = convPercent;
+            }
+            if (convAggregate) {
+                aggregateField.value = convAggregate;
+            }
+        }
+    });
+
+    let grades = [
+        { grade: "A+", aggregate: "24", percent: "100" },
+        { grade: "A", aggregate: "21", percent: "80" },
+        { grade: "A-", aggregate: "18", percent: "70" },
+        { grade: "B+", aggregate: "17", percent: "66.66" },
+        { grade: "B", aggregate: "16", percent: "63.5" },
+        { grade: "B-", aggregate: "15", percent: "53" },
+        { grade: "C+", aggregate: "14", percent: "46" },
+        { grade: "C", aggregate: "13", percent: "40" },
+        { grade: "C-", aggregate: "12", percent: "33" },
+        { grade: "D+", aggregate: "11", percent: "26" },
+        { grade: "D", aggregate: "10", percent: "20" },
+        { grade: "D-", aggregate: "9", percent: "13" },
+        { grade: "F1", aggregate: "7", percent: "31" },
+        { grade: "F2", aggregate: "4", percent: "18" },
+        { grade: "F3", aggregate: "2", percent: "9" },
+        { grade: "F4", aggregate: "0", percent: "0" },
+    ];
+
+    function getFromGrade(grade, conversionType) {
+        const match = grades.find((row) => {
+            return grade == row.grade;
+        });
+
+        if (conversionType == "Percent") {
+            return match?.percent;
+        } else {
+            return match?.aggregate;
+        }
+    }
+
+    function getFromAggregate(aggregate, conversionType) {
+        const match = grades.find((row) => {
+            return aggregate == row.aggregate;
+        });
+
+        if (conversionType == "Percent") {
+            return match?.percent;
+        } else {
+            return match?.grade;
+        }
+    }
+
+    function getFromPercent(percent, conversionType) {
+        const match = grades.find((row) => {
+            return percent >= row.percent;
+        });
+        if (conversionType == "Grade") {
+            return match?.grade;
+        } else {
+            return match?.aggregate;
+        }
+    }
+</script>
+
+<style>
+    form {
+        display: grid;
+        grid-template-columns: auto auto;
+        gap: 1rem;
+        margin: auto auto;
+    }
+
+    section {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    #submit {
+        grid-column: span 2;
+        justify-self: center;
+    }
+
+    input,
+    select {
+        box-sizing: border-box;
+        width: 100%;
+    }
+</style>
