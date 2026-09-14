@@ -1,120 +1,59 @@
 ---
-import astroLogo from '../assets/astro.svg';
 import Forms from './Forms.astro';
 ---
 
-<div id="container">
-	<main>
-    	<div class="converter-app">
-    		<section id="hero">
-    			<h1 class="title">
-    				Lancaster University Grade Converter
-    			</h1>
-    			<h2 class="subtitle">Use this tool to convert between grades, aggregation scores, and results. </h2>
-    			<Forms />
-    		</section>
-    	</div>
-	</main>
-	
-</div>
+<main>
+	<section class="converter-app">
+		<h1>Lancaster University Grade Converter</h1>
+		<p>Convert between grades, aggregation scores, and percentages.</p>
+		<Forms />
+		<p style="font-style: italic; font-family: serif;">Data updated 15/09/2026 from <a href="https://web.archive.org/web/20260914233103/https://www.lancaster.ac.uk/media/lancaster-university/content-assets/documents/student-based-services/asq/marp/UG-Assess-Regs.pdf">here</a>.</p>
+	</section>
+</main>
 
 <style>
-	
-
-	#container {
-		font-family: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
-		height: 100%;
-	}
-
 	main {
-		height: 100%;
 		display: flex;
+		min-height: 100%;
+		padding: 2rem;
+		box-sizing: border-box;
+		align-items: center;
 		justify-content: center;
-		background-color: gainsboro;
+		background-color: #ffffff;
+		opacity: 0.7;
+		background-image:  repeating-linear-gradient(to right, transparent 0, transparent 1.6666666666666667px, #ffffff 1.6666666666666667px, #ffffff 5px, transparent 5px, transparent 6.666666666666667px), repeating-linear-gradient(to bottom, transparent 0, transparent 1.6666666666666667px, #ffffff 1.6666666666666667px, #ffffff 5px, transparent 5px, transparent 6.666666666666667px), linear-gradient(to bottom, #ff0000 0.6px, transparent 0.6px), linear-gradient(to right, #ff0000 0.6px, transparent 0.6px) ;
+		background-size: 100% 100%, 100% 100%, 20px 20px, 20px 20px;
+		background-position: 0 0, 0 0, 0 -0.2px, -0.2px 0;
 	}
 
 	.converter-app {
-		background: white;
-		margin: auto auto;
-		padding: 10px;
-		height: fit-content;
-		border-radius: 10px;
-		border-color: black;
-		border: 1px;
-	}
-
-	#hero {
-		display: flex;
-		align-items: start;
-		flex-direction: column;
-		justify-content: center;
-		padding: 16px;
+		width: min(100%, 42rem);
+		padding: 2.5rem;
+		background: #ffffff;
+		border: 1px solid #e5e7eb;
+		border-radius: 0.75rem;
+		box-shadow: 0 0rem 2rem rgb(15 23 42 / 40%);
 	}
 
 	h1 {
-		font-size: 22px;
-		margin-top: 0.25em;
-	}
-
-
-	pre {
-		font-family:
-			ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono',
-			monospace;
-		font-weight: normal;
-		background: linear-gradient(14deg, #d83333 0%, #f041ff 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
 		margin: 0;
-	}
-
-	h2 {
-		margin: 0 0 1em;
-		font-weight: normal;
 		color: #111827;
-		font-size: 20px;
+		font-size: 1.75rem;
 	}
 
 	p {
-		color: #4b5563;
-		font-size: 16px;
-		line-height: 24px;
-		letter-spacing: -0.006em;
-		margin: 0;
+		margin: 0.75rem 0 2rem;
+		color: #6b7280;
+		line-height: 1.5;
 	}
 
-	code {
-		display: inline-block;
-		background:
-			linear-gradient(66.77deg, #f3cddd 0%, #f5cee7 100%) padding-box,
-			linear-gradient(155deg, #d83333 0%, #f041ff 18%, #f5cee7 45%) border-box;
-		border-radius: 8px;
-		border: 1px solid transparent;
-		padding: 6px 8px;
-	}
-
-	@media screen and (max-width: 768px) {
-		#container {
-			display: flex;
-			flex-direction: column;
+	@media (max-width: 640px) {
+		main {
+			padding: 1rem;
 		}
 
-		#hero {
-			display: block;
-			padding-top: 10%;
-		}
-
-		#links {
-			flex-wrap: wrap;
-		}
-
-		#links a.button {
-			padding: 14px 18px;
-		}
-
-		h1 {
-			line-height: 1.5;
+		.converter-app {
+			padding: 1.5rem;
 		}
 	}
 </style>
