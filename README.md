@@ -1,46 +1,33 @@
-# Astro Starter Kit: Basics
+# Lancaster University Grade Converter
+
+> A simple, fast way to convert between Lancaster University undergraduate grades, aggregation scores, and percentages.
+
+## Features
+
+- It converts scores
+- Converts scores very well
+- No tracking
+
+## Running Locally
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) 22.12.0 or later
+- npm
+
+### Install and run
 
 ```sh
-npm create astro@latest -- --template basics
+npm install
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Open [http://localhost:4321](http://localhost:4321) in your browser.
 
-## 🚀 Project Structure
+## Data
+The conversion values are based on Lancaster University's [Undergraduate Assessment Regulations 2026–27](https://web.archive.org/web/20260914233103/https://www.lancaster.ac.uk/media/lancaster-university/content-assets/documents/student-based-services/asq/marp/UG-Assess-Regs.pdf).
 
-Inside of your Astro project, you'll see the following folders and files:
+Please just double check the updated document if you think it's important.
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
-
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+***
+Built with [Astro 🚀](https://astro.build/)
